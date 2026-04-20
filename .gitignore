@@ -1,0 +1,29 @@
+# Local environment files
+.env
+.env.*
+.env_dir_backup_*/
+keys.txt
+
+# Logs and reports
+logs/
+reports/
+*.log
+site/
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+.pytest_paper_readiness/
+*.egg-info/
+.venv/
+venv/
+
+# Node
+node_modules/
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

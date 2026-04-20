@@ -1,0 +1,26 @@
+{
+  "starting_budget": 10000.0,
+  "cash_reserve_percent": 20.0,
+  "crypto_allocation_percent": 50.0,
+  "equity_allocation_percent": 50.0,
+  "max_symbol_allocation_percent": 40.0,
+  "allowed_symbols": [
+    "SPY",
+    "QQQ",
+    "AAPL",
+    "MSFT",
+    "BTC/USD",
+    "ETH/USD",
+    "SOL/USD"
+  ],
+  "preferred_symbols": [
+    "BTC/USD",
+    "ETH/USD",
+    "SOL/USD",
+    "QQQ",
+    "AAPL",
+    "SPY"
+  ],
+  "avoided_symbols": [],
+  "notes": "Tom mixed paper launch plan. Deploy up to 200 dollars of paper capital, keep 20 percent in reserve, give crypto a larger stash for overnight action, and still track core equities while Strategy A is being validated."
+}

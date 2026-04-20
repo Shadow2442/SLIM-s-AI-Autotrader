@@ -1,0 +1,12 @@
+{
+  "mode": "paper",
+  "asset_class": "us_equity",
+  "crypto_location": "us",
+  "strategy_name": "moving_average_momentum",
+  "bar_timeframe": "5Min",
+  "market_data_feed": "iex",
+  "poll_interval_seconds": 300,
+  "max_cycles": 10,
+  "session_duration_minutes": 15,
+  "dry_run": false
+}

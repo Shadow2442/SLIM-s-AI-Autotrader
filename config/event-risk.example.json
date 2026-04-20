@@ -1,0 +1,22 @@
+{
+  "enabled": true,
+  "rss_urls": [],
+  "symbol_aliases": {
+    "AAPL": ["apple", "iphone", "tim cook"],
+    "MSFT": ["microsoft", "satya nadella", "azure"],
+    "SPY": ["s&p 500", "us stocks", "equity market"],
+    "QQQ": ["nasdaq", "tech stocks", "big tech"]
+  },
+  "severity_keywords": {
+    "critical": ["bankruptcy", "fraud", "attack", "breach", "cyberattack", "resigns immediately"],
+    "high": ["lawsuit", "probe", "investigation", "downgrade", "misses earnings", "guidance cut"],
+    "medium": ["leadership change", "supply disruption", "volatility", "layoffs", "product delay"],
+    "low": ["partnership", "launch", "conference", "analyst note"]
+  },
+  "recommendation_overrides": {
+    "critical": "EXIT_NOW",
+    "high": "SELL_OR_HEDGE",
+    "medium": "WATCH_CLOSELY",
+    "low": "WATCH"
+  }
+}

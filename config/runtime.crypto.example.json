@@ -1,0 +1,14 @@
+{
+  "mode": "paper",
+  "asset_class": "crypto",
+  "crypto_location": "us",
+  "crypto_streaming_enabled": true,
+  "crypto_stream_cooldown_seconds": 5,
+  "strategy_name": "moving_average_momentum",
+  "bar_timeframe": "5Min",
+  "market_data_feed": "crypto",
+  "poll_interval_seconds": 60,
+  "max_cycles": 60,
+  "session_duration_minutes": 15,
+  "dry_run": false
+}

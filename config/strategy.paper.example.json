@@ -1,0 +1,18 @@
+{
+  "name": "moving_average_momentum",
+  "fast_window": 5,
+  "slow_window": 20,
+  "momentum_window": 6,
+  "history_limit": 30,
+  "breakout_lookback": 10,
+  "pullback_window": 5,
+  "pullback_tolerance_percent": 1.0,
+  "trend_strength_threshold_percent": 0.2,
+  "entry_threshold_percent": 0.4,
+  "exit_threshold_percent": -0.3,
+  "default_notional": 10.0,
+  "stop_loss_percent": 3.0,
+  "trailing_stop_percent": 2.0,
+  "take_profit_percent": 6.0,
+  "allow_sell_signals": true
+}

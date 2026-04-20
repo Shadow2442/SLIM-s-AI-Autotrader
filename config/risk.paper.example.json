@@ -1,0 +1,8 @@
+{
+  "max_notional_per_trade": 25.0,
+  "max_open_positions": 2,
+  "max_trades_per_session": 10,
+  "max_daily_loss": 50.0,
+  "allow_fractional": true,
+  "allowed_order_types": ["market", "limit"]
+}

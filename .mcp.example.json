@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "tradingview-research": {
+      "command": "cmd",
+      "args": [
+        "/c",
+        "npx",
+        "-y",
+        "REPLACE_WITH_SERVER_PACKAGE_OR_LOCAL_COMMAND"
+      ],
+      "env": {
+        "PROJECT_ROOT": "C:\\Users\\shado\\Downloads\\Autotrade",
+        "TRADINGVIEW_PROFILE": "%USERPROFILE%\\AppData\\Local\\TradingView"
+      }
+    }
+  }
+}
