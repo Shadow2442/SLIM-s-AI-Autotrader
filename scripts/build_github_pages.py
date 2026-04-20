@@ -11,12 +11,16 @@ DOC_ORDER = [
     Path("docs/research/alpaca-paper-build-plan.md"),
     Path("docs/research/published-resources.md"),
     Path("docs/research/strategy-categories.md"),
+    Path("docs/architecture/system-overview.md"),
     Path("docs/architecture/system-design.md"),
     Path("docs/architecture/operator-dashboard-and-automation.md"),
     Path("docs/operations/runbook.md"),
     Path("docs/operations/security-controls.md"),
     Path("docs/setup/mcp-onboarding.md"),
     Path("docs/setup/github-automation-and-pages.md"),
+    Path("CONTRIBUTING.md"),
+    Path("SECURITY.md"),
+    Path("CHANGELOG.md"),
 ]
 
 SCREENSHOT_ORDER = [
@@ -118,10 +122,11 @@ def build_index(root: Path, output_dir: Path, repo_slug: str) -> None:
         content = read_text(absolute_path)
         title = markdown_title(content, relative_path.stem.replace("-", " ").title())
         intro = extract_intro(content) or "Project documentation."
+        parent_label = relative_path.parent.name.title() if relative_path.parent.name else "Repo"
         doc_cards.append(
             f"""
             <article class="doc-card">
-              <span class="doc-tag">{html.escape(relative_path.parent.name.title())}</span>
+              <span class="doc-tag">{html.escape(parent_label)}</span>
               <h3>{html.escape(title)}</h3>
               <p>{html.escape(intro)}</p>
               <a href="{html.escape(repo_doc_url(repo_slug, relative_path))}" target="_blank" rel="noreferrer">Open on GitHub</a>
@@ -264,6 +269,28 @@ def build_index(root: Path, output_dir: Path, repo_slug: str) -> None:
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
       gap: 14px;
+    }
+    .architecture-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 14px;
+    }
+    .architecture-card {
+      border: 1px solid rgba(157, 177, 192, 0.16);
+      border-radius: 18px;
+      padding: 18px;
+      background: rgba(255, 255, 255, 0.03);
+      display: grid;
+      gap: 10px;
+    }
+    .architecture-card h3 {
+      font-size: 1.05rem;
+      line-height: 1.2;
+    }
+    .architecture-card p {
+      color: var(--muted);
+      line-height: 1.45;
+      font-size: 0.92rem;
     }
     .changelog-grid {
       display: grid;
@@ -510,6 +537,34 @@ def build_index(root: Path, output_dir: Path, repo_slug: str) -> None:
         <div class="workflow-list">
           {workflows_html}
         </div>
+      </section>
+
+      <section class="panel">
+        <div class="section-head">
+          <div>
+            <h2>Architecture Snapshot</h2>
+            <p>The platform is split into a live operator layer, a trading/runtime layer, a broker/reporting layer, and a GitHub automation layer so the project stays understandable while it grows.</p>
+          </div>
+        </div>
+        <div class="architecture-grid">
+          <article class="architecture-card">
+            <h3>Operator Layer</h3>
+            <p>Local web GUI, manual overrides, session controls, warnings, order tape, and market watch.</p>
+          </article>
+          <article class="architecture-card">
+            <h3>Runtime + Trading</h3>
+            <p>Cycle timing, crypto wakeups, strategy logic, risk approval, duplicate-order suppression, and execution orchestration.</p>
+          </article>
+          <article class="architecture-card">
+            <h3>Broker + Reports</h3>
+            <p>Alpaca Paper integration, runtime state, dashboard snapshots, operator HTML, and session reports.</p>
+          </article>
+          <article class="architecture-card">
+            <h3>GitHub Automation</h3>
+            <p>CI, Pages publishing, changelog-backed public docs, and repository governance documents.</p>
+          </article>
+        </div>
+        <a class="changelog-link" href="{html.escape(repo_doc_url(repo_slug, Path('docs/architecture/system-overview.md')))}" target="_blank" rel="noreferrer">Open architecture overview on GitHub</a>
       </section>
 
       <section class="panel">

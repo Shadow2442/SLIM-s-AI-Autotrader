@@ -115,6 +115,26 @@ The current product is built around three layers:
    - GitHub Actions CI
    - GitHub Pages site generation
 
+## Architecture Snapshot
+
+```mermaid
+flowchart LR
+    A["Operator / User"] --> B["Local Operator Web GUI"]
+    B --> C["Runtime State + Overrides"]
+    C --> D["Trading Session Runner"]
+    D --> E["Strategy + Risk Layer"]
+    E --> F["Broker Adapter"]
+    F --> G["Alpaca Paper (Equities + Crypto)"]
+    D --> H["Reports / Dashboard Snapshots"]
+    H --> B
+    I["GitHub Actions"] --> J["CI + Pages"]
+    J --> K["Public Docs / Repo Automation"]
+```
+
+If you want the deeper version, start here:
+
+- [`docs/architecture/system-overview.md`](docs/architecture/system-overview.md)
+
 ## Current Feature Highlights
 
 ### Trading
@@ -163,6 +183,15 @@ The current product is built around three layers:
 - `docs/setup/` onboarding and GitHub setup guides
 - `scripts/` helper tooling, including GitHub Pages generation
 - `docs/assets/readme/` README and documentation visuals
+
+## Contributing And Security
+
+The repository now includes dedicated policies for both collaboration and safe operation:
+
+- [`CONTRIBUTING.md`](CONTRIBUTING.md)
+- [`SECURITY.md`](SECURITY.md)
+
+These are not decorative corporate pamphlets. They are the house rules for changes, releases, secrets, and workflow edits.
 
 ## Quick Start
 
@@ -279,6 +308,10 @@ The best next upgrades are:
 4. add issue templates and a pull request template
 5. improve strategy quality and portfolio analytics
 6. continue polishing the operator dashboard for long unattended runs
+
+## Versioning
+
+The repository now uses milestone-style public versioning. The initial public GitHub baseline is intended to be tagged as `v0.1.0`, with future user-facing or architecture-relevant updates recorded in `CHANGELOG.md` before the next push.
 
 ## Safety Note
 
