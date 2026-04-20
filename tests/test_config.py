@@ -1,3 +1,4 @@
+import os
 import json
 import subprocess
 from pathlib import Path
@@ -142,10 +143,14 @@ def test_ensure_operator_server_uses_hidden_windows_process(tmp_path: Path, monk
     assert url == "http://127.0.0.1:8765/operator"
     assert captured["kwargs"]["stdout"] is not None
     assert captured["kwargs"]["stderr"] is not None
-    assert captured["kwargs"]["startupinfo"] is not None
-    assert (
-        captured["kwargs"]["creationflags"] & getattr(subprocess, "CREATE_NO_WINDOW", 0)
-    ) == getattr(subprocess, "CREATE_NO_WINDOW", 0)
+    if os.name == "nt":
+        assert captured["kwargs"]["startupinfo"] is not None
+        assert (
+            captured["kwargs"]["creationflags"] & getattr(subprocess, "CREATE_NO_WINDOW", 0)
+        ) == getattr(subprocess, "CREATE_NO_WINDOW", 0)
+    else:
+        assert captured["kwargs"]["startupinfo"] is None
+        assert captured["kwargs"]["creationflags"] == 0
 
 
 def test_ensure_operator_server_respects_existing_server_lock(tmp_path: Path, monkeypatch) -> None:
