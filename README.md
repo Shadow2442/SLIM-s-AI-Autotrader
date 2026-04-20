@@ -41,19 +41,19 @@ Latest highlights:
 
 ### Main Operator Window
 
-![Main operator window](docs/assets/readme/operator-dashboard-overview.png)
+[![Main operator window](docs/assets/readme/operator-dashboard-overview.png)](docs/assets/readme/operator-dashboard-overview.png)
 
 This is the main control surface for the live paper-trading session. It shows top-level capital state, active market watch signals, pending orders, operator controls, and the latest order activity while the bot is running.
 
 ### Market Overview Cards
 
-![Market overview cards](docs/assets/readme/market-overview-cards.png)
+[![Market overview cards](docs/assets/readme/market-overview-cards.png)](docs/assets/readme/market-overview-cards.png)
 
 These cards are the per-asset decision layer. Each one shows live price context, suggested buy/sell zones, recommendation state, risk level, momentum, moving-average structure, and the strategy basis used for the current asset.
 
 ### Night Watch Monitor
 
-![Night Watch monitor](docs/assets/readme/night-watch-monitor.png)
+[![Night Watch monitor](docs/assets/readme/night-watch-monitor.png)](docs/assets/readme/night-watch-monitor.png)
 
 The Night Watch view is built for longer unattended runs. It summarizes session health, completed cycles, warnings, and the latest notable events so the operator can review what happened during a multi-hour automated session.
 

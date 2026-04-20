@@ -476,6 +476,17 @@ def build_index(root: Path, output_dir: Path, repo_slug: str) -> None:
       border: 1px solid rgba(157, 177, 192, 0.14);
       background: #09131d;
     }
+    .screenshot-link {
+      display: block;
+      border-radius: 14px;
+      overflow: hidden;
+      text-decoration: none;
+      transition: transform 120ms ease, box-shadow 120ms ease;
+    }
+    .screenshot-link:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.22);
+    }
     .screenshot-card h3 {
       font-size: 1.1rem;
       line-height: 1.2;
@@ -589,7 +600,9 @@ def build_index(root: Path, output_dir: Path, repo_slug: str) -> None:
         screenshot_cards.append(
             f"""
             <article class="screenshot-card">
-              <img src="assets/screenshots/{html.escape(destination_name)}" alt="{html.escape(title)}" />
+              <a class="screenshot-link" href="assets/screenshots/{html.escape(destination_name)}" target="_blank" rel="noreferrer">
+                <img src="assets/screenshots/{html.escape(destination_name)}" alt="{html.escape(title)}" />
+              </a>
               <h3>{html.escape(title)}</h3>
               <p>{html.escape(description)}</p>
             </article>

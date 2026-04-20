@@ -20,6 +20,7 @@ The format is inspired by [Keep a Changelog](https://keepachangelog.com/en/1.0.0
 - README now includes architecture, contribution, and security entry points.
 - GitHub Pages now surfaces the changelog and broader repo governance/docs story.
 - GitHub Pages layout now uses cleaner section navigation, calmer spacing, and a more guided document flow.
+- README and GitHub Pages screenshots are now clickable for full-resolution viewing.
 
 ## [2026-04-20]
 
