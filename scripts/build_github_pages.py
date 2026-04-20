@@ -632,6 +632,9 @@ def build_index(root: Path, output_dir: Path, repo_slug: str) -> None:
             """
         )
 
+    preview_image_name = "operator-dashboard-overview.png"
+    preview_image_url = f"{pages_url}assets/screenshots/{preview_image_name}"
+
     html_body = f"""<!doctype html>
 <html lang="en">
   <head>
@@ -639,6 +642,17 @@ def build_index(root: Path, output_dir: Path, repo_slug: str) -> None:
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{html.escape(project_title)} | GitHub Pages</title>
     <meta name="description" content="GitHub-ready documentation and automation hub for {html.escape(project_title)}." />
+    <meta property="og:title" content="{html.escape(project_title)} | GitHub Pages" />
+    <meta property="og:description" content="AI-assisted paper trading lab for equities and crypto with a live operator dashboard, CI, Pages docs, and public project updates." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="{html.escape(pages_url)}" />
+    <meta property="og:image" content="{html.escape(preview_image_url)}" />
+    <meta property="og:image:alt" content="SLIM's AI Autotrader operator dashboard overview" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="{html.escape(project_title)} | GitHub Pages" />
+    <meta name="twitter:description" content="AI-assisted paper trading lab with a live operator dashboard, mixed crypto/equity support, and GitHub automation." />
+    <meta name="twitter:image" content="{html.escape(preview_image_url)}" />
+    <link rel="preload" as="image" href="assets/screenshots/{html.escape(preview_image_name)}" />
     <link rel="stylesheet" href="assets/site.css" />
   </head>
   <body>
