@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import html
 import os
+import shutil
 from pathlib import Path
 
 
@@ -16,6 +17,24 @@ DOC_ORDER = [
     Path("docs/operations/security-controls.md"),
     Path("docs/setup/mcp-onboarding.md"),
     Path("docs/setup/github-automation-and-pages.md"),
+]
+
+SCREENSHOT_ORDER = [
+    (
+        Path("docs/assets/readme/operator-dashboard-overview.png"),
+        "Operator Dashboard",
+        "Main operator window with account state, market watch, order tape, and session controls.",
+    ),
+    (
+        Path("docs/assets/readme/market-overview-cards.png"),
+        "Market Overview Cards",
+        "Per-asset trading cards with signal, risk, momentum, moving averages, and buy/sell zones.",
+    ),
+    (
+        Path("docs/assets/readme/night-watch-monitor.png"),
+        "Night Watch Monitor",
+        "Long-run monitoring surface for session status, trade counts, warnings, and fresh report signals.",
+    ),
 ]
 
 
@@ -75,6 +94,8 @@ def build_index(root: Path, output_dir: Path, repo_slug: str) -> None:
     output_dir.mkdir(parents=True, exist_ok=True)
     assets_dir = output_dir / "assets"
     assets_dir.mkdir(parents=True, exist_ok=True)
+    screenshots_dir = assets_dir / "screenshots"
+    screenshots_dir.mkdir(parents=True, exist_ok=True)
 
     css = """
     :root {
@@ -206,6 +227,36 @@ def build_index(root: Path, output_dir: Path, repo_slug: str) -> None:
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
       gap: 14px;
     }
+    .screenshot-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+    .screenshot-card {
+      border: 1px solid rgba(157, 177, 192, 0.16);
+      border-radius: 18px;
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.03);
+      display: grid;
+      gap: 12px;
+    }
+    .screenshot-card img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 14px;
+      border: 1px solid rgba(157, 177, 192, 0.14);
+      background: #09131d;
+    }
+    .screenshot-card h3 {
+      font-size: 1.1rem;
+      line-height: 1.2;
+    }
+    .screenshot-card p {
+      color: var(--muted);
+      line-height: 1.45;
+      font-size: 0.92rem;
+    }
     .doc-card {
       border: 1px solid rgba(157, 177, 192, 0.16);
       border-radius: 18px;
@@ -293,6 +344,23 @@ def build_index(root: Path, output_dir: Path, repo_slug: str) -> None:
     repo_url = f"https://github.com/{repo_slug}"
     pages_url = f"https://{repo_slug.split('/')[0].lower()}.github.io/{repo_slug.split('/')[1]}/"
 
+    screenshot_cards: list[str] = []
+    for relative_path, title, description in SCREENSHOT_ORDER:
+        absolute_path = root / relative_path
+        if not absolute_path.exists():
+            continue
+        destination_name = absolute_path.name
+        shutil.copy2(absolute_path, screenshots_dir / destination_name)
+        screenshot_cards.append(
+            f"""
+            <article class="screenshot-card">
+              <img src="assets/screenshots/{html.escape(destination_name)}" alt="{html.escape(title)}" />
+              <h3>{html.escape(title)}</h3>
+              <p>{html.escape(description)}</p>
+            </article>
+            """
+        )
+
     html_body = f"""<!doctype html>
 <html lang="en">
   <head>
@@ -351,6 +419,18 @@ def build_index(root: Path, output_dir: Path, repo_slug: str) -> None:
         </div>
         <div class="doc-grid">
           {''.join(doc_cards)}
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="section-head">
+          <div>
+            <h2>Operator Screenshots</h2>
+            <p>A quick visual tour of the operator experience, including the live dashboard, market overview cards, and the long-run monitor.</p>
+          </div>
+        </div>
+        <div class="screenshot-grid">
+          {''.join(screenshot_cards)}
         </div>
       </section>
 
