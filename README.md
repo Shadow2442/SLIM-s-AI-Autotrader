@@ -1,5 +1,9 @@
 # SLIM's AI Autotrader
 
+[![CI](https://github.com/Shadow2442/SLIM-s-AI-Autotrader/actions/workflows/ci.yml/badge.svg)](https://github.com/Shadow2442/SLIM-s-AI-Autotrader/actions/workflows/ci.yml)
+[![Pages](https://github.com/Shadow2442/SLIM-s-AI-Autotrader/actions/workflows/pages.yml/badge.svg)](https://github.com/Shadow2442/SLIM-s-AI-Autotrader/actions/workflows/pages.yml)
+[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-live-2bd67b?logo=github)](https://shadow2442.github.io/SLIM-s-AI-Autotrader/)
+
 AI-assisted paper trading lab for equities and crypto, built around `Alpaca Paper`, a live operator dashboard, explainable strategy output, and a GitHub automation path for CI and Pages publishing.
 
 The platform is already live in `Alpaca Paper` mode and actively supports both:
@@ -21,6 +25,17 @@ SLIM's AI Autotrader is a research-first automated trading project that combines
 - GitHub automation for CI and public documentation
 
 This is not pitched as a magical profit printer. It is an auditable trading lab designed to make decisions visible, testable, and reviewable before anything approaches real money.
+
+## Changelog
+
+The project now keeps one canonical history file:
+
+- [Full changelog](CHANGELOG.md)
+
+Latest highlights:
+
+- `2026-04-20`: GitHub automation, Pages publishing, issue/PR templates, screenshot-backed docs, and the rewritten project README all landed together.
+- `Unreleased`: changelog integration is now wired into both the README and the GitHub Pages site so future pushes keep the public project story in sync.
 
 ## Screenshots
 
@@ -229,6 +244,8 @@ Local Pages preview:
 ```powershell
 .\.venv\Scripts\python.exe scripts\build_github_pages.py --output site --repo Shadow2442/SLIM-s-AI-Autotrader
 ```
+
+The public docs site also includes the screenshot gallery and a changelog section so the repo front page and Pages landing page stay aligned.
 
 ## Current Status
 

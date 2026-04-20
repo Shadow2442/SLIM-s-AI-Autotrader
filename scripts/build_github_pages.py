@@ -67,8 +67,46 @@ def repo_doc_url(repo_slug: str, relative_path: Path) -> str:
     return f"https://github.com/{repo_slug}/blob/main/{relative_path.as_posix()}"
 
 
+def extract_changelog_sections(markdown: str, limit: int = 2) -> list[tuple[str, list[tuple[str, list[str]]]]]:
+    sections: list[tuple[str, list[tuple[str, list[str]]]]] = []
+    current_title: str | None = None
+    current_groups: list[tuple[str, list[str]]] = []
+    current_group_title: str | None = None
+    current_group_items: list[str] = []
+
+    def flush_group() -> None:
+        nonlocal current_group_title, current_group_items, current_groups
+        if current_group_title and current_group_items:
+            current_groups.append((current_group_title, current_group_items.copy()))
+        current_group_title = None
+        current_group_items = []
+
+    def flush_section() -> None:
+        nonlocal current_title, current_groups
+        flush_group()
+        if current_title and current_groups:
+            sections.append((current_title, current_groups.copy()))
+        current_title = None
+        current_groups = []
+
+    for raw_line in markdown.splitlines():
+        line = raw_line.strip()
+        if line.startswith("## "):
+            flush_section()
+            current_title = line[3:].strip()
+        elif line.startswith("### "):
+            flush_group()
+            current_group_title = line[4:].strip()
+        elif line.startswith("- "):
+            current_group_items.append(line[2:].strip())
+
+    flush_section()
+    return sections[:limit]
+
+
 def build_index(root: Path, output_dir: Path, repo_slug: str) -> None:
     readme = read_text(root / "README.md")
+    changelog = read_text(root / "CHANGELOG.md")
     project_title = markdown_title(readme, "Autotrade")
     project_intro = extract_intro(readme)
 
@@ -227,6 +265,47 @@ def build_index(root: Path, output_dir: Path, repo_slug: str) -> None:
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
       gap: 14px;
     }
+    .changelog-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 14px;
+    }
+    .changelog-card {
+      border: 1px solid rgba(157, 177, 192, 0.16);
+      border-radius: 18px;
+      padding: 18px;
+      background: rgba(255, 255, 255, 0.03);
+      display: grid;
+      gap: 12px;
+    }
+    .changelog-card h3 {
+      font-size: 1.15rem;
+      line-height: 1.2;
+    }
+    .changelog-group {
+      display: grid;
+      gap: 8px;
+    }
+    .changelog-group h4 {
+      font-size: 0.9rem;
+      letter-spacing: 0.02em;
+      color: #b5dfff;
+      text-transform: uppercase;
+    }
+    .changelog-group ul {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+      line-height: 1.5;
+      font-size: 0.92rem;
+    }
+    .changelog-link {
+      margin-top: 12px;
+      display: inline-flex;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
     .screenshot-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -361,6 +440,29 @@ def build_index(root: Path, output_dir: Path, repo_slug: str) -> None:
             """
         )
 
+    changelog_sections = extract_changelog_sections(changelog, limit=2)
+    changelog_cards: list[str] = []
+    for title, groups in changelog_sections:
+        group_markup = []
+        for group_title, items in groups:
+            item_list = "".join(f"<li>{html.escape(item)}</li>" for item in items)
+            group_markup.append(
+                f"""
+                <div class="changelog-group">
+                  <h4>{html.escape(group_title)}</h4>
+                  <ul>{item_list}</ul>
+                </div>
+                """
+            )
+        changelog_cards.append(
+            f"""
+            <article class="changelog-card">
+              <h3>{html.escape(title)}</h3>
+              {''.join(group_markup)}
+            </article>
+            """
+        )
+
     html_body = f"""<!doctype html>
 <html lang="en">
   <head>
@@ -432,6 +534,19 @@ def build_index(root: Path, output_dir: Path, repo_slug: str) -> None:
         <div class="screenshot-grid">
           {''.join(screenshot_cards)}
         </div>
+      </section>
+
+      <section class="panel">
+        <div class="section-head">
+          <div>
+            <h2>Project Changelog</h2>
+            <p>The public site mirrors the repository changelog so recent automation, dashboard, and documentation work stays visible without digging through commits.</p>
+          </div>
+        </div>
+        <div class="changelog-grid">
+          {''.join(changelog_cards)}
+        </div>
+        <a class="changelog-link" href="{html.escape(repo_doc_url(repo_slug, Path('CHANGELOG.md')))}" target="_blank" rel="noreferrer">Open full changelog on GitHub</a>
       </section>
 
       <p class="footer">
