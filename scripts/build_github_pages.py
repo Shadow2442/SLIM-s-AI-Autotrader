@@ -42,6 +42,14 @@ SCREENSHOT_ORDER = [
     ),
 ]
 
+DOC_SECTION_ORDER = [
+    "Research",
+    "Architecture",
+    "Operations",
+    "Setup",
+    "Repo",
+]
+
 
 def read_text(path: Path) -> str:
     return path.read_text(encoding="utf-8").strip() if path.exists() else ""
@@ -123,7 +131,7 @@ def build_index(root: Path, output_dir: Path, repo_slug: str) -> None:
     project_title = markdown_title(readme, "Autotrade")
     project_intro = extract_intro(readme)
 
-    doc_cards: list[str] = []
+    doc_sections: dict[str, list[str]] = {label: [] for label in DOC_SECTION_ORDER}
     for relative_path in DOC_ORDER:
         absolute_path = root / relative_path
         if not absolute_path.exists():
@@ -132,7 +140,7 @@ def build_index(root: Path, output_dir: Path, repo_slug: str) -> None:
         title = markdown_title(content, relative_path.stem.replace("-", " ").title())
         intro = extract_intro(content) or "Project documentation."
         parent_label = relative_path.parent.name.title() if relative_path.parent.name else "Repo"
-        doc_cards.append(
+        doc_sections.setdefault(parent_label, []).append(
             f"""
             <article class="doc-card">
               <span class="doc-tag">{html.escape(parent_label)}</span>
@@ -140,6 +148,28 @@ def build_index(root: Path, output_dir: Path, repo_slug: str) -> None:
               <p>{html.escape(intro)}</p>
               <a href="{html.escape(repo_doc_url(repo_slug, relative_path))}" target="_blank" rel="noreferrer">Open on GitHub</a>
             </article>
+            """
+        )
+
+    documentation_sections_markup: list[str] = []
+    for section_name in DOC_SECTION_ORDER:
+        cards = doc_sections.get(section_name, [])
+        if not cards:
+            continue
+        documentation_sections_markup.append(
+            f"""
+            <div class="doc-section">
+              <div class="doc-section-head">
+                <div>
+                  <span class="doc-section-tag">{html.escape(section_name)}</span>
+                  <h3>{html.escape(section_name)} Documents</h3>
+                </div>
+                <span class="doc-section-count">{len(cards)} docs</span>
+              </div>
+              <div class="doc-grid">
+                {''.join(cards)}
+              </div>
+            </div>
             """
         )
 
@@ -274,9 +304,54 @@ def build_index(root: Path, output_dir: Path, repo_slug: str) -> None:
       line-height: 1.5;
       margin-top: 0;
     }
+    .doc-sections {
+      display: grid;
+      gap: 18px;
+    }
+    .doc-section {
+      border: 1px solid rgba(157, 177, 192, 0.12);
+      border-radius: 20px;
+      padding: 18px;
+      background: rgba(255, 255, 255, 0.02);
+      display: grid;
+      gap: 14px;
+    }
+    .doc-section-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .doc-section-head h3 {
+      font-size: 1.1rem;
+      line-height: 1.2;
+      margin-top: 6px;
+    }
+    .doc-section-tag {
+      color: #9cefbf;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 700;
+    }
+    .doc-section-count {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 72px;
+      height: 28px;
+      padding: 0 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(157, 177, 192, 0.16);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
     .doc-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 14px;
     }
     .architecture-grid {
@@ -375,26 +450,30 @@ def build_index(root: Path, output_dir: Path, repo_slug: str) -> None:
     .doc-card {
       border: 1px solid rgba(157, 177, 192, 0.16);
       border-radius: 18px;
-      padding: 18px;
+      padding: 16px;
       background: rgba(255, 255, 255, 0.03);
       display: grid;
-      gap: 10px;
+      gap: 8px;
     }
     .doc-tag {
-      color: #9cefbf;
-      font-size: 0.72rem;
+      color: #8fbfdc;
+      font-size: 0.68rem;
       text-transform: uppercase;
       letter-spacing: 0.05em;
       font-weight: 700;
     }
     .doc-card h3 {
-      font-size: 1.15rem;
-      line-height: 1.2;
+      font-size: 1.05rem;
+      line-height: 1.25;
     }
     .doc-card p {
       color: var(--muted);
       line-height: 1.45;
       font-size: 0.92rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
     .workflow-item strong {
       display: block;
@@ -580,11 +659,11 @@ def build_index(root: Path, output_dir: Path, repo_slug: str) -> None:
         <div class="section-head">
           <div>
             <h2>Project Documentation</h2>
-            <p>These documents stay in the repository, while this site gives the project a clean public landing page and a stable entry point.</p>
+            <p>These documents now sit in grouped shelves so the public site feels more like a guided library and less like a pile of very earnest cards.</p>
           </div>
         </div>
-        <div class="doc-grid">
-          {''.join(doc_cards)}
+        <div class="doc-sections">
+          {''.join(documentation_sections_markup)}
         </div>
       </section>
 
