@@ -19,6 +19,7 @@ The format is inspired by [Keep a Changelog](https://keepachangelog.com/en/1.0.0
 - Future feature work in this repository should update this file before the next push so GitHub, Pages, and local docs stay aligned.
 - README now includes architecture, contribution, and security entry points.
 - GitHub Pages now surfaces the changelog and broader repo governance/docs story.
+- GitHub Pages layout now uses cleaner section navigation, calmer spacing, and a more guided document flow.
 
 ## [2026-04-20]
 

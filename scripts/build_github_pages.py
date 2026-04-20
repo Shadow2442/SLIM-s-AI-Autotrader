@@ -199,9 +199,9 @@ def build_index(root: Path, output_dir: Path, repo_slug: str) -> None:
       color: var(--text);
     }
     .wrap {
-      max-width: 1240px;
+      max-width: 1280px;
       margin: 0 auto;
-      padding: 32px 24px 64px;
+      padding: 32px 24px 72px;
     }
     .hero {
       display: grid;
@@ -241,6 +241,35 @@ def build_index(root: Path, output_dir: Path, repo_slug: str) -> None:
       line-height: 1.55;
       max-width: 62ch;
       font-size: 1.02rem;
+    }
+    .hero-copy {
+      max-width: 62ch;
+    }
+    .section-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+    .section-nav a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 38px;
+      padding: 0 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(157, 177, 192, 0.16);
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.86rem;
+      font-weight: 600;
+      transition: background 120ms ease, border-color 120ms ease, transform 120ms ease;
+    }
+    .section-nav a:hover {
+      background: rgba(102, 184, 255, 0.1);
+      border-color: rgba(102, 184, 255, 0.28);
+      transform: translateY(-1px);
     }
     .link-row, .workflow-list {
       display: grid;
@@ -288,21 +317,30 @@ def build_index(root: Path, output_dir: Path, repo_slug: str) -> None:
       letter-spacing: -0.03em;
     }
     section + section {
-      margin-top: 24px;
+      margin-top: 28px;
     }
     .section-head {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 16px;
-      margin-bottom: 14px;
+      margin-bottom: 16px;
     }
     .section-head p {
       color: var(--muted);
       max-width: 70ch;
-      font-size: 0.95rem;
-      line-height: 1.5;
+      font-size: 0.96rem;
+      line-height: 1.55;
       margin-top: 0;
+    }
+    .section-kicker {
+      color: #9cefbf;
+      font-size: 0.74rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 700;
+      margin-bottom: 8px;
+      display: inline-flex;
     }
     .doc-sections {
       display: grid;
@@ -311,7 +349,7 @@ def build_index(root: Path, output_dir: Path, repo_slug: str) -> None:
     .doc-section {
       border: 1px solid rgba(157, 177, 192, 0.12);
       border-radius: 20px;
-      padding: 18px;
+      padding: 20px;
       background: rgba(255, 255, 255, 0.02);
       display: grid;
       gap: 14px;
@@ -420,7 +458,7 @@ def build_index(root: Path, output_dir: Path, repo_slug: str) -> None:
     .screenshot-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 16px;
+      gap: 18px;
     }
     .screenshot-card {
       border: 1px solid rgba(157, 177, 192, 0.16);
@@ -503,7 +541,7 @@ def build_index(root: Path, output_dir: Path, repo_slug: str) -> None:
       color: #9cefbf;
     }
     .footer {
-      margin-top: 28px;
+      margin-top: 32px;
       color: var(--muted);
       font-size: 0.88rem;
       line-height: 1.5;
@@ -514,6 +552,9 @@ def build_index(root: Path, output_dir: Path, repo_slug: str) -> None:
       }
       .stats {
         grid-template-columns: 1fr;
+      }
+      .section-nav {
+        gap: 8px;
       }
     }
     """
@@ -593,7 +634,14 @@ def build_index(root: Path, output_dir: Path, repo_slug: str) -> None:
         <div class="panel">
           <span class="eyebrow">GitHub Automation</span>
           <h1>{html.escape(project_title)}</h1>
-          <p>{html.escape(project_intro)}</p>
+          <p class="hero-copy">{html.escape(project_intro)}</p>
+          <nav class="section-nav" aria-label="Page sections">
+            <a href="#automation">Automation</a>
+            <a href="#architecture">Architecture</a>
+            <a href="#documentation">Documentation</a>
+            <a href="#screenshots">Screenshots</a>
+            <a href="#changelog">Changelog</a>
+          </nav>
           <div class="stats">
             <div class="stat"><span>Deployment</span><strong>Pages</strong></div>
             <div class="stat"><span>Automation</span><strong>CI + Publish</strong></div>
@@ -615,9 +663,10 @@ def build_index(root: Path, output_dir: Path, repo_slug: str) -> None:
         </div>
       </section>
 
-      <section class="panel">
+      <section class="panel" id="automation">
         <div class="section-head">
           <div>
+            <span class="section-kicker">Automation</span>
             <h2>What The Automation Covers</h2>
             <p>The repository now includes the GitHub-side baseline for automated quality checks plus static documentation deployment.</p>
           </div>
@@ -627,9 +676,10 @@ def build_index(root: Path, output_dir: Path, repo_slug: str) -> None:
         </div>
       </section>
 
-      <section class="panel">
+      <section class="panel" id="architecture">
         <div class="section-head">
           <div>
+            <span class="section-kicker">Architecture</span>
             <h2>Architecture Snapshot</h2>
             <p>The platform is split into a live operator layer, a trading/runtime layer, a broker/reporting layer, and a GitHub automation layer so the project stays understandable while it grows.</p>
           </div>
@@ -655,9 +705,10 @@ def build_index(root: Path, output_dir: Path, repo_slug: str) -> None:
         <a class="changelog-link" href="{html.escape(repo_doc_url(repo_slug, Path('docs/architecture/system-overview.md')))}" target="_blank" rel="noreferrer">Open architecture overview on GitHub</a>
       </section>
 
-      <section class="panel">
+      <section class="panel" id="documentation">
         <div class="section-head">
           <div>
+            <span class="section-kicker">Documentation</span>
             <h2>Project Documentation</h2>
             <p>These documents now sit in grouped shelves so the public site feels more like a guided library and less like a pile of very earnest cards.</p>
           </div>
@@ -667,9 +718,10 @@ def build_index(root: Path, output_dir: Path, repo_slug: str) -> None:
         </div>
       </section>
 
-      <section class="panel">
+      <section class="panel" id="screenshots">
         <div class="section-head">
           <div>
+            <span class="section-kicker">Screenshots</span>
             <h2>Operator Screenshots</h2>
             <p>A quick visual tour of the operator experience, including the live dashboard, market overview cards, and the long-run monitor.</p>
           </div>
@@ -679,9 +731,10 @@ def build_index(root: Path, output_dir: Path, repo_slug: str) -> None:
         </div>
       </section>
 
-      <section class="panel">
+      <section class="panel" id="changelog">
         <div class="section-head">
           <div>
+            <span class="section-kicker">History</span>
             <h2>Project Changelog</h2>
             <p>The public site mirrors the repository changelog so recent automation, dashboard, and documentation work stays visible without digging through commits.</p>
           </div>
