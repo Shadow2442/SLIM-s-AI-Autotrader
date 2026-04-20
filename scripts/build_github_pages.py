@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import html
 import os
+import re
 import shutil
 from pathlib import Path
 
@@ -52,9 +53,17 @@ def extract_intro(markdown: str) -> str:
     for line in lines:
         if not line or line.startswith("#"):
             continue
+        if line.startswith("[!["):
+            continue
         if line.startswith("- ") or line.startswith("* "):
             break
-        chunks.append(line)
+        cleaned = line
+        cleaned = re.sub(r"!\[([^\]]*)\]\([^)]+\)", r"\1", cleaned)
+        cleaned = re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", cleaned)
+        cleaned = cleaned.replace("`", "")
+        if not cleaned.strip():
+            continue
+        chunks.append(cleaned)
         if len(" ".join(chunks)) > 280:
             break
     return " ".join(chunks[:3]).strip()
